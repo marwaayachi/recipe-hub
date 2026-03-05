@@ -1,0 +1,47 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Recipe } from "@/types/recipe";
+
+type RecipeCardProps = {
+    recipe: Recipe;
+}
+
+export function RecipeCard({recipe}: RecipeCardProps) {
+  return (
+    <Card className="relative mx-auto w-full max-w-xl pt-0 overflow-hidden">
+      
+      <div className=" relative w-full h-64">
+        <Image
+          src={recipe.image_url}
+          alt={recipe.title}
+          fill
+          className="w-full h-full object-cover object-center"
+        />
+      </div>
+      <CardHeader>
+        <CardAction>
+          {recipe.categories.map((tag: string) => (
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
+        </CardAction>
+        <CardTitle>{recipe.title}</CardTitle>
+        <CardDescription>{recipe.description}</CardDescription>
+      </CardHeader>
+      <CardFooter>
+        <Button className="w-full">View Recipe</Button>
+      </CardFooter>
+    </Card>
+  );
+}
