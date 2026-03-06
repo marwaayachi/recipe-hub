@@ -1,12 +1,11 @@
-export type recipeTag = "Dessert"| "Vegetarian"| "Quick"| "Vegan"| "Drink";
+export type recipe_category = "Dessert"| "Vegetarian"| "Quick"| "Vegan"| "Drink";
 
 export interface Recipe {
-    id:string,
+    id:number,
     title: string,
     image_url: string,
     description: string,
     ingredients:string[],
     instructions: string[],
-    categories:recipeTag[],
-    author_id: string
+    categories:recipe_category
 }
