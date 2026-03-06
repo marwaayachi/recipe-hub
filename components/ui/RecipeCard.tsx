@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Recipe } from "@/types/recipe";
+import { Recipe} from "@/types/recipe";
 
 type RecipeCardProps = {
     recipe: Recipe;
@@ -19,7 +19,6 @@ type RecipeCardProps = {
 export function RecipeCard({recipe}: RecipeCardProps) {
   return (
     <Card className="relative mx-auto w-full max-w-xl pt-0 overflow-hidden">
-      
       <div className=" relative w-full h-64">
         <Image
           src={recipe.image_url}
@@ -30,17 +29,15 @@ export function RecipeCard({recipe}: RecipeCardProps) {
       </div>
       <CardHeader>
         <CardAction>
-          {recipe.categories.map((tag: string) => (
-            <Badge key={tag} variant="secondary">
-              {tag}
+            <Badge  variant="secondary" className="text-sm font-medium">
+                {recipe.categories}
             </Badge>
-          ))}
         </CardAction>
-        <CardTitle>{recipe.title}</CardTitle>
-        <CardDescription>{recipe.description}</CardDescription>
+        <CardTitle className="text-xl">{recipe.title}</CardTitle>
+        <CardDescription className="text-md">{recipe.description}</CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button className="w-full">View Recipe</Button>
+        <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-md">View Recipe</Button>
       </CardFooter>
     </Card>
   );
