@@ -30,7 +30,7 @@ export default function Navbar() {
           <div className="flex items-center gap-20">
             <NavLink href="/" label="Home" />
             <NavLink href="/recipes" label="Recipes" />
-            <NavLink href="/add-recipes" label="Add Recipes" />
+            <NavLink href="//recipes/new" label="Add Recipes" />
             <NavLink href="/login" label="Login" />
           </div>
         </div>

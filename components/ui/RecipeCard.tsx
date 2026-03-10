@@ -25,19 +25,24 @@ export function RecipeCard({recipe}: RecipeCardProps) {
           alt={recipe.title}
           fill
           className="w-full h-full object-cover object-center"
+          unoptimized
         />
       </div>
       <CardHeader>
         <CardAction>
-            <Badge  variant="secondary" className="text-sm font-medium">
-                {recipe.categories}
-            </Badge>
+          <Badge variant="secondary" className="text-sm font-medium">
+            {recipe.categories}
+          </Badge>
         </CardAction>
         <CardTitle className="text-xl">{recipe.title}</CardTitle>
-        <CardDescription className="text-md">{recipe.description}</CardDescription>
+        <CardDescription className="text-md">
+          {recipe.description}
+        </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-md">View Recipe</Button>
+        <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-md">
+          View Recipe
+        </Button>
       </CardFooter>
     </Card>
   );
