@@ -1,5 +1,5 @@
 
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase/client';
 import { uploadImage } from '@/lib/storage';
 import { recipeSchema } from '@/lib/validation/recipeSchema';
  
