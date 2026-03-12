@@ -20,15 +20,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { [key: string]: string | string[] };
 }>) {
+  const pathname =
+    params?.slug && Array.isArray(params.slug)
+      ? "/" + params.slug.join("/")
+      : "/";
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar/>
+        <Navbar pathname={pathname} />
         {children}
       </body>
     </html>

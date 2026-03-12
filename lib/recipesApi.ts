@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient";
+import { supabase } from "./supabase/client";
 import { Recipe } from "@/types/recipe";
 
 export async function getRecipes(): Promise<Recipe[]> {
