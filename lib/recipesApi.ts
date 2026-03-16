@@ -1,8 +1,15 @@
-import { supabase } from "./supabase/client";
+'use server';
+
+import { createClient } from "./supabase/server";
 import { Recipe } from "@/types/recipe";
+import { getCurrentUser } from "@/app/user/action";
 
 export async function getRecipes(): Promise<Recipe[]> {
-    const {data, error} = await supabase.from("recipes").select("*");
+    const supabase = await createClient();
+    const user = await getCurrentUser();
+    if (!user) throw new Error("User not logged in");
+ 
+    const {data, error} = await supabase.from("recipes").select("*").eq("user_id", user.id);
     console.log("Recipes :", JSON.stringify(data, null, 2));
 
     if (error) {

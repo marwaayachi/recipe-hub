@@ -17,3 +17,4 @@ create table "recipes" (
     "categories" recipe_category,
     "created_at" timestamp with time zone default now()
 );
+

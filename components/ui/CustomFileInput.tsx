@@ -4,9 +4,10 @@ import { useState } from "react";
 
 interface CustomFileInputProps {
   name: string;
+  onFileSelect: (file: File) => void;
 }
 
-export default function CustomFileInput({ name }: CustomFileInputProps) {
+export default function CustomFileInput({ name, onFileSelect }: CustomFileInputProps) {
   const [fileName, setFileName] = useState("");
 
   return (
@@ -19,8 +20,11 @@ export default function CustomFileInput({ name }: CustomFileInputProps) {
           accept="image/*"
           className="hidden"
           onChange={(e) => {
-            if (e.target.files?.[0]) setFileName(e.target.files[0].name);
-          }}
+            const file = e.target.files?.[0];
+            if (file) {
+              setFileName(file.name);
+              onFileSelect(file);
+          }}}
         />
       </label>
     </div>
