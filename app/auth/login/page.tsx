@@ -1,5 +1,5 @@
 import AuthForm from "@/components/ui/AuthForm";
 
-export default function LoginPage() {
+export default async function LoginPage() {
   return <AuthForm mode="login" />;
 }

@@ -2,29 +2,35 @@
 
 import Form from "next/form";
 import Image from "next/image";
-import { useState } from "react";
-import { redirect } from "next/navigation";
-
-import { createRecipe } from "./action";
+import { useActionState, useState } from "react";
 import CustomFileInput from "@/components/ui/CustomFileInput";
+import { createRecipe } from "./action";
+import { useRouter } from "next/navigation";
 
-type FieldErrors = {
-  [key: string]: string[] | undefined;
-};
+
+const initialState = { errors: {} };
 
 export default function NewRecipePage() {
-  const [errors, setErrors] = useState<FieldErrors>({});
+  const [state, formAction] = useActionState(createRecipe, initialState);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+
+  const router = useRouter();
 
 
+ 
   const handleSubmit = async (formData: FormData) => {
-    const res = await createRecipe(formData);
-
-    if (res?.errors) {
-      setErrors(res.errors);
-    } else {
-       redirect(`/recipes`);
+    if (!selectedFile) {
+      setFileError("Please select an image !");
+      return;
     }
-  }
+
+    formData.set("image", selectedFile);
+    await formAction(formData);
+   if (state.success) {
+    router.push("/recipes");
+   }
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
@@ -49,8 +55,9 @@ export default function NewRecipePage() {
             className="w-full p-3 rounded-lg bg-white/90 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-400"
             required
           />
-          {errors?.title && <p className="text-red-500">{errors.title[0]}</p>}
-
+          {state.errors?.title && (
+            <p className="text-red-500">{state.errors.title[0]}</p>
+          )}
           <textarea
             name="description"
             placeholder="Recipe description"
@@ -58,8 +65,8 @@ export default function NewRecipePage() {
             rows={3}
             required
           />
-          {errors?.description && (
-            <p className="text-red-500">{errors.description[0]}</p>
+          {state.errors?.description && (
+            <p className="text-red-500">{state.errors.description[0]}</p>
           )}
 
           <textarea
@@ -69,8 +76,8 @@ export default function NewRecipePage() {
             rows={3}
             required
           />
-          {errors.ingredients && (
-            <p className="text-red-500">{errors.ingredients[0]}</p>
+          {state.errors?.ingredients && (
+            <p className="text-red-500">{state.errors.ingredients[0]}</p>
           )}
 
           <textarea
@@ -80,8 +87,8 @@ export default function NewRecipePage() {
             rows={4}
             required
           />
-          {errors.instructions && (
-            <p className="text-red-500">{errors.instructions[0]}</p>
+          {state.errors?.instructions && (
+            <p className="text-red-500">{state.errors.instructions[0]}</p>
           )}
 
           <select
@@ -97,8 +104,24 @@ export default function NewRecipePage() {
             <option value="Drink">Drink</option>
           </select>
 
-          <CustomFileInput name="image" />
+          <CustomFileInput
+            name="image"
+            onFileSelect={(file) => {
+              setSelectedFile(file);
+              setPreview(URL.createObjectURL(file));
+              setFileError(null);
+            }}
+          />
+          {fileError && <p className="text-red-500">{fileError}</p>}
+          {preview && (
+            <img
+              src={preview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded-lg mt-2 text-center"
+            />
+          )}
 
+          {fileError && <p className="text-red-500">{fileError}</p>}
           <button
             type="submit"
             className="mt-2 bg-red-500 hover:bg-red-600 transition-all duration-200 text-white font-semibold p-3 rounded-lg shadow-lg hover:scale-[1.02]"
@@ -109,4 +132,6 @@ export default function NewRecipePage() {
       </div>
     </div>
   );
+}
+
 }

@@ -1,63 +1,65 @@
+'use server';
 
-import { supabase } from '@/lib/supabase/client';
-import { uploadImage } from '@/lib/storage';
+import { createClient } from '@/lib/supabase/server';
+import { getCurrentUser } from '@/app/user/action';
+import { recipe_category } from '@/types/recipe';
+import { uploadImageClient } from '@/lib/storage';
 import { recipeSchema } from '@/lib/validation/recipeSchema';
- 
-export async function createRecipe(formData: FormData) {
+import { redirect } from 'next/dist/server/api-utils';
 
-   const rawData = {
-         title: formData.get("title"),
-         description: formData.get("description"),
-         categories: formData.get("categories"),
-         ingredients: formData.get("ingredients"),
-         instructions: formData.get("instructions"),
-   };
 
-   const result = recipeSchema.safeParse(rawData);
+export type FieldErrors = {
+  [key: string]: string[] | undefined;
+};
 
-   if (!result.success) {
-    // return errors to the form
-      return { errors: result.error.flatten().fieldErrors };
-   }
+export async function createRecipe(
+  prevState: { success?: true; errors?: FieldErrors },
+  formData: FormData
+): Promise<{ success?: true; errors?: FieldErrors }>  {
+    
+    const supabase = await createClient();
+    const user = await getCurrentUser();
 
-   const data = result.data;
+    if (!user) return { errors: { general: ["User not logged in"] } };
 
-   const ingredientsArray = data.ingredients
-      .split(",")
-      .map((i) => i.trim());
+  const parsed = recipeSchema.safeParse({
+      title: formData.get("title"),
+      description: formData.get("description"),
+      categories: formData.get("categories"),
+      ingredients: formData.get("ingredients"),
+      instructions: formData.get("instructions"),
+  });
 
-   const instructionsArray = data.instructions
-      .split(",")
-      .map((i) => i.trim());
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
 
- 
+  const { title, description, categories, ingredients, instructions } = parsed.data;
 
-   const file = formData.get("image") as File;
+  const file = formData.get("image") as File;
 
-   const { imageUrl, error } = await uploadImage({
-      file,
-      bucket:"recipes-images",
-      folder: "recipes"
-   })
- 
-   if (error) {
-         console.error(error);
-         throw new Error("Image upload failed");
-   }
+  if (!file) return { errors: { image: ["No file provided"] } };
   
-        
-   const {error: insertError } = await supabase.from("recipes").insert([
-      {
-         title: data.title,
-         description: data.description,
-         ingredients : ingredientsArray,
-         instructions : instructionsArray,
-         categories: data.categories, 
-         image_url : imageUrl,
-      }
-   ])
 
-   if (insertError) {
-      throw new Error(insertError.message)
-   }  
+  // Upload image 
+  const image_url = await uploadImageClient(file);
+
+  // Insert recipe
+  const { error } = await supabase.from("recipes").insert([
+    {
+      title,
+      description,
+      categories,
+      ingredients,
+      instructions,
+      image_url,
+      user_id: user.id
+    }
+  ]);
+
+  if (error) return { errors: { general: [error.message] } };
+
+
+  return { success: true };
+  
 }

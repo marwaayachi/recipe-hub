@@ -1,22 +1,12 @@
 "use client";
 
-import { supabase } from "@/lib/supabase/client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { User } from "lucide-react";
-import { logOut } from "@/services/authService";
+
 
 export default function UserMenu({ email }: {email:string}) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await logOut();
-    router.refresh();
-    router.push("/");
-  };
 
   return (
     <div className="relative">
@@ -38,7 +28,7 @@ export default function UserMenu({ email }: {email:string}) {
           </Link>
 
           <button
-            onClick={handleLogout}
+          
             className="block w-full text-left py-1 hover:text-red-500"
           >
             Logout

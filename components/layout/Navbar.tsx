@@ -1,15 +1,49 @@
+'use client'
+
 import Link from "next/link";
+import { User } from "@supabase/supabase-js";
+import { usePathname, useRouter } from "next/navigation";
 
 import NavLink from "../ui/NavLink";
-import { getCurrentUser } from "@/services/authService";
-import UserMenu from "../ui/UserMenu";
+import { Button } from "../ui/button";
+import { supabase } from "@/lib/supabase/client";
+import { useEffect } from "react";
+
+
 
 type NavbarProps = {
-  pathname: string; 
+  user: User | null;
 };
-export default async function Navbar({ pathname}: NavbarProps) {
-  const isHome = pathname === "/";
-  const user = await getCurrentUser();
+
+export default function Navbar({ user }: NavbarProps) {
+    const pathname = usePathname();
+    const isHome = pathname === "/";
+    const router = useRouter();
+
+
+    console.log("User:", user);
+    useEffect(() => {
+      const { data: listener } = supabase.auth.onAuthStateChange(() => {
+        router.refresh();
+      });
+
+      return () => {
+        listener.subscription.unsubscribe();
+      };
+    }, [router]);
+
+    const handleSignout = async () => {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error(error.message);
+        return;
+      }
+
+      console.log("logout successfully");
+
+      router.refresh(); 
+      router.push("/auth/login");
+    }
 
   return (
     <nav
@@ -32,14 +66,22 @@ export default async function Navbar({ pathname}: NavbarProps) {
         <div className="flex items-center gap-10">
           <NavLink href="/" label="Home" />
           <NavLink href="/recipes" label="Recipes" />
-       
-         <NavLink href={user ? "/recipes/new" : "/auth/login"} label="Add Recipe" />
+          <NavLink href="/recipes/new" label="Add Recipe" />
 
-          {/* Login / User Menu */}
           {!user ? (
-            <NavLink href="/auth/login" label="Login" />
+            <Link
+              href="/auth/login"
+              className="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              Login
+            </Link>
           ) : (
-            <UserMenu email={user.email ?? ""} />
+            <Button
+              onClick={handleSignout}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Logout
+            </Button>
           )}
         </div>
       </div>
