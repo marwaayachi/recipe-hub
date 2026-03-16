@@ -7,10 +7,10 @@ import CustomFileInput from "@/components/ui/CustomFileInput";
 import { createRecipe } from "./action";
 import { useRouter } from "next/navigation";
 
-
 const initialState = { errors: {} };
 
 export default function NewRecipePage() {
+  console.log("helloo");
   const [state, formAction] = useActionState(createRecipe, initialState);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -18,8 +18,6 @@ export default function NewRecipePage() {
 
   const router = useRouter();
 
-
- 
   const handleSubmit = async (formData: FormData) => {
     if (!selectedFile) {
       setFileError("Please select an image !");
@@ -28,9 +26,11 @@ export default function NewRecipePage() {
 
     formData.set("image", selectedFile);
     await formAction(formData);
-   if (state.success) {
-    router.push("/recipes");
-   }
+
+    if (state.success) {
+      router.push("/recipes");
+    }
+  };
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
@@ -40,7 +40,6 @@ export default function NewRecipePage() {
         fill
         className="object-cover object-center"
       />
-
       <div className="absolute inset-0 bg-black/50" />
 
       <div className="relative z-10 w-full max-w-xl px-6 py-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20">
@@ -58,6 +57,7 @@ export default function NewRecipePage() {
           {state.errors?.title && (
             <p className="text-red-500">{state.errors.title[0]}</p>
           )}
+
           <textarea
             name="description"
             placeholder="Recipe description"
@@ -121,7 +121,6 @@ export default function NewRecipePage() {
             />
           )}
 
-          {fileError && <p className="text-red-500">{fileError}</p>}
           <button
             type="submit"
             className="mt-2 bg-red-500 hover:bg-red-600 transition-all duration-200 text-white font-semibold p-3 rounded-lg shadow-lg hover:scale-[1.02]"
@@ -132,6 +131,4 @@ export default function NewRecipePage() {
       </div>
     </div>
   );
-}
-
 }
