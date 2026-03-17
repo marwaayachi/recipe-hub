@@ -1,9 +1,9 @@
 
 
-import { Recipe } from "@/types/recipe";
+import { cardData } from "@/types/recipe";
 import { RecipeCard } from "./RecipeCard";
 
-type Props = { recipes: Recipe[] };
+type Props = { recipes: cardData[] };
 
 export default function RecipesList({ recipes }: Props) {
   return (
