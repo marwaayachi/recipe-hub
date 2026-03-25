@@ -78,7 +78,7 @@ export default function Navbar({ user }: NavbarProps) {
           ) : (
             <Button
               onClick={handleSignout}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-red-500 text-white font-bold px-4 py-2 rounded"
             >
               Logout
             </Button>

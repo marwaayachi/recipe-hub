@@ -1,6 +1,8 @@
 'use server';
 
+import { uploadImageClient } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
+import { recipeSchema } from "@/lib/validation/recipeSchema";
 import { redirect } from "next/navigation";
 
 
@@ -20,18 +22,48 @@ export async function getRecipeById(id: number) {
 }
 
 export async function updateRecipe(id: number, formData: FormData) {
-    const supabase = await createClient();
+  const supabase = await createClient();
 
-    const title = formData.get("title");
-    const description = formData.get("description");
+  const parsed = recipeSchema.safeParse({
+    title: formData.get("title"),
+    description: formData.get("description"),
+    categories: formData.get("categories"),
+    ingredients: formData.get("ingredients"),
+    instructions: formData.get("instructions"),
+  });
 
-    const { error } = await supabase
-        .from("recipes")
-        .update({title, description})
-        .eq("id", id);
+  if (!parsed.success) {
+    throw new Error("Validation failed");
+  }
 
-    if (error) throw new Error(error.message);
-    console.log("ID to update:", id);
+  const { title, description, categories, ingredients, instructions } =
+    parsed.data;
 
-    redirect(`/recipes/${id}`);
+  const file = formData.get("image") as File;
+  let image_url;
+
+  if (file && file.size > 0) {
+    image_url = await uploadImageClient(file);
+  }
+
+  const updateData: any = {
+    title,
+    description,
+    categories,
+    ingredients,
+    instructions,
+  };
+
+  if (image_url) {
+    updateData.image_url = image_url;
+  }
+
+  const { error } = await supabase
+    .from("recipes")
+    .update(updateData)
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+
+  redirect(`/recipes/${id}`);
 }

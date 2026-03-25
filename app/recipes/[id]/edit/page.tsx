@@ -2,20 +2,19 @@
 
 import { getRecipeById, updateRecipe } from "@/lib/API/recipes/recipes";
 import RecipeForm from "@/components/RecipeForm";
-import { redirect } from "next/navigation";
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function EditRecipePage({ params }: Props) {
   const { id } = await params;
   const numericId = Number(id);
+  
   const recipe = await getRecipeById(numericId);
   
 
   async function updateAction(formData: FormData) {
     "use server";
     await updateRecipe(numericId, formData);
-    redirect('/recipes');
   }
 
   return (
