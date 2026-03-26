@@ -28,7 +28,7 @@ export default async function RecipeInfoPage({ params }: Props) {
       </div>
 
       <p className="mb-2 font-medium text-gray-700">
-        Category: <span className="text-blue-500">{recipe.categories}</span>
+        Category: <span className="text-blue-500">{recipe.categories?.name}</span>
       </p>
 
       <p className="mb-4">{recipe.description}</p>

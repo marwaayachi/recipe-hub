@@ -1,21 +1,34 @@
-export type recipe_category = "Dessert"| "Vegetarian"| "Quick"| "Vegan"| "Drink";
+export const recipeCategories = ["Breakfast", "Lunch", "Dinner", "Dessert", "Vegan", "Quick", "Drink"];
+export type RecipeCategory = (typeof recipeCategories)[number]
 
-export type RecipeFormInput = {
+export type Category = {
   id: number;
-  title: string;
-  description: string;
-  ingredients: string;
-  instructions: string;
-  categories: recipe_category;
-  image: File;
+  name: string;
 };
 
-export type cardData = {
+export type Recipe = {
   id: number;
   title: string;
   description: string;
   ingredients: string;
   instructions: string;
-  categories: recipe_category;
+  category_id: number;
   image_url: string;
-}
+};
+
+export type RecipeCard = {
+  id: number;
+  title: string;
+  description: string;
+  categories: Category | null;
+  image_url: string;
+};
+
+export type RecipeFormInput = {
+  title: string;
+  description: string;
+  ingredients: string;
+  instructions: string;
+  category_id: number;
+  image_url?: string;
+};

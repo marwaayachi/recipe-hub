@@ -10,11 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cardData } from "@/types/recipe";
+import type { RecipeCard } from "@/types/recipe";
 import Link from "next/link";
 
 type RecipeCardProps = {
-  recipe: cardData;
+  recipe: RecipeCard;
 };
 
 export function RecipeCard({recipe}: RecipeCardProps) {
@@ -32,7 +32,7 @@ export function RecipeCard({recipe}: RecipeCardProps) {
       <CardHeader>
         <CardAction>
           <Badge variant="secondary" className="text-sm font-medium">
-            {recipe.categories}
+            {recipe.categories?.name}
           </Badge>
         </CardAction>
         <CardTitle className="text-xl">{recipe.title}</CardTitle>

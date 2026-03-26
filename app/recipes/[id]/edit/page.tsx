@@ -2,6 +2,7 @@
 
 import { getRecipeById, updateRecipe } from "@/lib/API/recipes/recipes";
 import RecipeForm from "@/components/RecipeForm";
+import { getCategories } from "@/lib/API/recipes/getCategories";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -10,7 +11,8 @@ export default async function EditRecipePage({ params }: Props) {
   const numericId = Number(id);
   
   const recipe = await getRecipeById(numericId);
-  
+  const categories = await getCategories();
+   
 
   async function updateAction(formData: FormData) {
     "use server";
@@ -30,6 +32,7 @@ export default async function EditRecipePage({ params }: Props) {
           initialValues={recipe}
           onSubmit={updateAction}
           submitLabel="Update Recipe"
+          categories={categories}
         />
 
         {/* Existing Image Preview */}

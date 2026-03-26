@@ -23,16 +23,16 @@ export async function createRecipe(
   const parsed = recipeSchema.safeParse({
       title: formData.get("title"),
       description: formData.get("description"),
-      categories: formData.get("categories"),
       ingredients: formData.get("ingredients"),
       instructions: formData.get("instructions"),
+      category_id: Number(formData.get("category_id")),
   });
 
   if (!parsed.success) {
     return { errors: parsed.error.flatten().fieldErrors };
   }
 
-  const { title, description, categories, ingredients, instructions } = parsed.data;
+  const { title, description, category_id, ingredients, instructions } = parsed.data;
 
   const file = formData.get("image") as File;
 
@@ -47,11 +47,12 @@ export async function createRecipe(
     {
       title,
       description,
-      categories,
+      image_url,
       ingredients,
       instructions,
-      image_url,
-      user_id: user.id
+      user_id: user.id,
+      category_id,
+      
     }
   ]);
 

@@ -5,8 +5,8 @@ export const recipeSchema = z.object({
 
   description: z.string().min(10, "Description is too short"),
 
-  categories: z.enum(["Dessert", "Vegetarian", "Quick", "Vegan", "Drink"]),
-
+  category_id: z.coerce.number(),
+  
   ingredients: z
     .string()
     .transform((val) => val.split(",").map((i) => i.trim()))
