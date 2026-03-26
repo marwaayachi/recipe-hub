@@ -1,8 +1,8 @@
 'use client';
 
-import { Category, RecipeCardData } from "@/types/recipe";
+import { Category, RecipeCardData } from "@/features/recipes/types/recipe";
 import CategorySelect from "./CategorySelect";
-import RecipesList from "./ui/recipesList";
+import RecipesList from "./recipesList";
 import { useState } from "react";
 
 
@@ -20,14 +20,14 @@ export default function RecipesFilter({ recipes, categories }: Props) {
         : recipes.filter((r) => r.categories?.id === selectedCategory);
   return (
     <div className="max-w-6xl mx-auto mt-25 flex flex-col gap-6">
-      {/* Filter dropdown */}
+    
       <CategorySelect
         categories={categories}
         selectedCategory={selectedCategory}
         onChange={setSelectedCategory}
       />
 
-      {/* Recipes or empty message */}
+     
       {filteredRecipes.length > 0 ? (
         <RecipesList recipes={filteredRecipes} />
       ) : (

@@ -1,9 +1,9 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { getCurrentUser } from '@/app/user/action';
+import { getCurrentUser } from '@/features/auth/API/getCurrentUser';
 import { uploadImageClient } from '@/lib/storage';
-import { recipeSchema } from '@/lib/validation/recipeSchema';
+import { recipeSchema } from '@/features/recipes/validation/recipeSchema';
 
 
 export type FieldErrors = {

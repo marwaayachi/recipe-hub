@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { RecipeCardData } from "@/types/recipe";
+import type { RecipeCardData } from "@/features/recipes/types/recipe";
 import Link from "next/link";
 
 type RecipeCardProps = {

@@ -6,8 +6,9 @@ import { usePathname, useRouter } from "next/navigation";
 
 import NavLink from "../ui/NavLink";
 import { Button } from "../ui/button";
-import { supabase } from "@/lib/supabase/client";
 import { useEffect } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { logout } from "@/features/auth/API/logout";
 
 
 
@@ -21,7 +22,6 @@ export default function Navbar({ user }: NavbarProps) {
     const router = useRouter();
 
 
-    console.log("User:", user);
     useEffect(() => {
       const { data: listener } = supabase.auth.onAuthStateChange(() => {
         router.refresh();
@@ -33,16 +33,14 @@ export default function Navbar({ user }: NavbarProps) {
     }, [router]);
 
     const handleSignout = async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error(error.message);
-        return;
-      }
+     try {
+       await logout();
 
-      console.log("logout successfully");
-
-      router.refresh(); 
-      router.push("/auth/login");
+       router.refresh();
+       router.push("/auth/login");
+     } catch (err) {
+       console.error(err);
+     }
     }
 
   return (

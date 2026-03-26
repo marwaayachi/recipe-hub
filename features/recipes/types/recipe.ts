@@ -33,3 +33,13 @@ export type RecipeFormInput = {
   category_id: number;
   image_url?: string;
 };
+
+
+export type UpdateRecipeInput = {
+  title: string;
+  description: string;
+  category_id: number;
+  ingredients: string[];
+  instructions: string[];
+  image_url?: string;
+};

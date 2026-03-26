@@ -1,6 +1,6 @@
 "use client"; 
 
-import { deleteRecipeAction } from "@/app/recipes/[id]/delete/action";
+import { deleteRecipeAction } from "@/features/recipes/API/deleteRecipe";
 import { Button } from "./button";
 
 export default function DeleteButton({ id }: { id: number }) {

@@ -1,11 +1,12 @@
 'use server';
 
-import { createClient } from "./supabase/server";
-import { RecipeCard } from "@/types/recipe";
-import { getCurrentUser } from "@/app/user/action";
+import { createClient } from "@/lib/supabase/server";
+import { RecipeCardData } from "../types/recipe";
+
+import { getCurrentUser } from "@/features/auth/API/getCurrentUser";
 
 
-export async function getRecipes(): Promise<RecipeCard[]> {
+export async function getRecipes(): Promise<RecipeCardData[]> {
   const supabase = await createClient();
   const user = await getCurrentUser();
 
@@ -32,5 +33,5 @@ export async function getRecipes(): Promise<RecipeCard[]> {
 
   
 
-  return (data ?? []) as RecipeCard[];
+  return (data ?? []) as RecipeCardData[];
 }

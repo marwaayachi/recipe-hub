@@ -2,26 +2,10 @@
 
 import { uploadImageClient } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
-import { recipeSchema } from "@/lib/validation/recipeSchema";
-import { redirect } from "next/navigation";
+import { recipeSchema } from "@/features/recipes/validation/recipeSchema";
+import { UpdateRecipeInput } from "../types/recipe";
 
 
-export async function getRecipeById(id: number) {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("recipes")
-    .select(`*,categories(id, name)`)
-    .eq("id", id)
-    .single();
-
-  if (error)  throw new Error("Recipe ID is missing");
-  console.log("ID:to crate", id);
-
-  console.log("Recipe info:", data)
-
-  return data;
-}
 
 export async function updateRecipe(id: number, formData: FormData) {
   const supabase = await createClient();
@@ -48,7 +32,7 @@ export async function updateRecipe(id: number, formData: FormData) {
     image_url = await uploadImageClient(file);
   }
 
-  const updateData: any = {
+ const updateData: Partial<UpdateRecipeInput> = {
     title,
     description,
     category_id,
@@ -67,7 +51,7 @@ export async function updateRecipe(id: number, formData: FormData) {
 
   if (error) return { success: false, errors: { form: [error.message] } };
   return { success: true }; 
-  //redirect(`/recipes/${id}`);
+
 }
 
 

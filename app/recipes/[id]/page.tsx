@@ -1,13 +1,14 @@
-import { getRecipeById } from "@/lib/API/recipes/recipes";
+import { getRecipeById } from "@/features/recipes/API/getRecipeByID";
+
 import Image from "next/image";
 import Link from "next/link";
-import DeleteButton from "@/components/ui/deleteBtn"; 
+import DeleteButton from "@/components/ui/deleteBtn";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
 export default async function RecipeInfoPage({ params }: Props) {
-  const { id } = await params; 
+  const { id } = await params;
 
   const numericId = Number(id);
   if (!numericId) return;
@@ -28,7 +29,8 @@ export default async function RecipeInfoPage({ params }: Props) {
       </div>
 
       <p className="mb-2 font-medium text-gray-700">
-        Category: <span className="text-blue-500">{recipe.categories?.name}</span>
+        Category:{" "}
+        <span className="text-blue-500">{recipe.categories?.name}</span>
       </p>
 
       <p className="mb-4">{recipe.description}</p>

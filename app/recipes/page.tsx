@@ -1,8 +1,6 @@
-
-
-import { getRecipes } from "@/lib/recipesApi";
-import { getCategories } from "@/lib/API/recipes/getCategories";
-import RecipesFilter from "@/components/RecipesFilter";
+import { getCategories } from "@/features/recipes/API/getCategories";
+import RecipesFilter from "@/features/recipes/components/RecipesFilter";
+import { getRecipes } from "@/features/recipes/API/getRecipes";
 
 
 

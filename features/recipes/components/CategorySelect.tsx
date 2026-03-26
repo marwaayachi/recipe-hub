@@ -1,6 +1,6 @@
 'use client';
 
-import { Category } from "@/types/recipe";
+import { Category } from "@/features/recipes/types/recipe";
 import { FaSearch } from "react-icons/fa";
 
 

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Form from "next/form";
 import CustomFileInput from "@/components/ui/CustomFileInput";
-import { RecipeFormInput } from "@/types/recipe";
+import { RecipeFormInput } from "@/features/recipes/types/recipe";
 
 interface RecipeFormProps {
   categories: { id: number; name: string }[];

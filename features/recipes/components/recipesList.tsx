@@ -1,6 +1,6 @@
 
 
-import { RecipeCardData } from "@/types/recipe";
+import { RecipeCardData } from "@/features/recipes/types/recipe";
 import { RecipeCard } from "./RecipeCard";
 
 type Props = { recipes: RecipeCardData[] };

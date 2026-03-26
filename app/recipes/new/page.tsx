@@ -1,12 +1,12 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { createRecipe } from "./action";
+import { createRecipe } from "../../../features/recipes/API/CreateRecipe";
 import { useRouter } from "next/navigation";
-import RecipeForm from "@/components/RecipeForm";
+import RecipeForm from "@/features/recipes/components/RecipeForm";
 import Image from "next/image";
-import { getCategories } from "@/lib/API/recipes/getCategories";
-import { Category } from "@/types/recipe";
+import { getCategories } from "@/features/recipes/API/getCategories";
+import { Category } from "@/features/recipes/types/recipe";
 
 export default function NewRecipePage() {
   const [state, formAction] = useActionState(createRecipe, { errors: {} });
