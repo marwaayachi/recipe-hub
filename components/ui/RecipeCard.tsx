@@ -10,11 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { RecipeCard } from "@/types/recipe";
+import type { RecipeCardData } from "@/types/recipe";
 import Link from "next/link";
 
 type RecipeCardProps = {
-  recipe: RecipeCard;
+  recipe: RecipeCardData;
 };
 
 export function RecipeCard({recipe}: RecipeCardProps) {

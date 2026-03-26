@@ -13,10 +13,11 @@ export type Recipe = {
   ingredients: string;
   instructions: string;
   category_id: number;
+  categories?: Category;
   image_url: string;
 };
 
-export type RecipeCard = {
+export type RecipeCardData = {
   id: number;
   title: string;
   description: string;

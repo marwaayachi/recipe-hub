@@ -66,8 +66,8 @@ export async function updateRecipe(id: number, formData: FormData) {
     .eq("id", id);
 
   if (error) return { success: false, errors: { form: [error.message] } };
-
-  return { success: true };
-
-  redirect(`/recipes/${id}`);
+  return { success: true }; 
+  //redirect(`/recipes/${id}`);
 }
+
+
