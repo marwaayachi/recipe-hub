@@ -1,7 +1,10 @@
 "use server";
 
-import { getRecipeById, updateRecipe } from "@/lib/API/recipes/recipes";
-import RecipeForm from "@/components/RecipeForm";
+import { getRecipeById } from "@/features/recipes/API/getRecipeByID";
+import { updateRecipe } from "@/features/recipes/API/updateRecipe";
+import RecipeForm from "@/features/recipes/components/RecipeForm";
+import { getCategories } from "@/features/recipes/API/getCategories";
+import { redirect } from "next/navigation";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -10,11 +13,13 @@ export default async function EditRecipePage({ params }: Props) {
   const numericId = Number(id);
   
   const recipe = await getRecipeById(numericId);
-  
+  const categories = await getCategories();
+   
 
   async function updateAction(formData: FormData) {
     "use server";
     await updateRecipe(numericId, formData);
+    redirect(`/recipes/${numericId}`);
   }
 
   return (
@@ -30,6 +35,7 @@ export default async function EditRecipePage({ params }: Props) {
           initialValues={recipe}
           onSubmit={updateAction}
           submitLabel="Update Recipe"
+          categories={categories}
         />
 
         {/* Existing Image Preview */}

@@ -1,7 +1,8 @@
 "use server"; 
 
-import { authService } from "./authService";
+
 import { redirect } from "next/navigation";
+import { authService } from "./authService";
 
 export async function loginAction(email: string, password: string) {
   const { error } = await authService.login(email, password);

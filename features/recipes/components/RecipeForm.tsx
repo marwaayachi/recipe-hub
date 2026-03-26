@@ -3,33 +3,32 @@
 import { useState } from "react";
 import Form from "next/form";
 import CustomFileInput from "@/components/ui/CustomFileInput";
+import { RecipeFormInput } from "@/features/recipes/types/recipe";
 
 interface RecipeFormProps {
-  initialValues?: {
-    title?: string;
-    description?: string;
-    ingredients?: string;
-    instructions?: string;
-    categories?: string;
-    image_url?: string;
-  };
+  categories: { id: number; name: string }[];
+  initialValues?: Partial<RecipeFormInput>;
   onSubmit: (formData: FormData) => Promise<void>;
   submitLabel: string;
 }
 
 export default function RecipeForm({
+  categories,
   initialValues = {},
   onSubmit,
   submitLabel,
 }: RecipeFormProps) {
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
     initialValues.image_url || null,
   );
+  
   const [fileError, setFileError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
 
   const handleSubmit = async (formData: FormData) => {
+
     if (!selectedFile && !initialValues.image_url) {
       setFileError("Please select an image!");
       return;
@@ -37,7 +36,8 @@ export default function RecipeForm({
 
     if (selectedFile) formData.set("image", selectedFile);
 
-    await onSubmit(formData);
+    const response = await onSubmit(formData);
+    console.log("After submit:", response);
   };
 
   return (
@@ -88,18 +88,21 @@ export default function RecipeForm({
       )}
 
       <select
-        name="categories"
-        defaultValue={initialValues.categories || ""}
+        name="category_id"
+        defaultValue={initialValues.category_id || ""}
         className="w-full p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-400"
         required
       >
         <option value="">Select category</option>
-        <option value="Dessert">Dessert</option>
-        <option value="Vegetarian">Vegetarian</option>
-        <option value="Quick">Quick</option>
-        <option value="Vegan">Vegan</option>
-        <option value="Drink">Drink</option>
+        {categories.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.name}
+          </option>
+        ))}
       </select>
+      {errors?.category_id && (
+        <p className="text-red-500">{errors.category_id[0]}</p>
+      )}
 
       <CustomFileInput
         name="image"

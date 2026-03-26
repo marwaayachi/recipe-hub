@@ -6,6 +6,7 @@ export async function uploadImageClient(file: File, folder: string = "recipes") 
   const filePath = `${folder}/${fileName}`;
 
   const { data, error } = await supabase.storage.from("recipes-images").upload(filePath, file);
+  console.log(data);
 
   if (error) throw error;
 

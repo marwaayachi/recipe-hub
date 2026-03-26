@@ -2,24 +2,10 @@
 
 import { uploadImageClient } from "@/lib/storage";
 import { createClient } from "@/lib/supabase/server";
-import { recipeSchema } from "@/lib/validation/recipeSchema";
-import { redirect } from "next/navigation";
+import { recipeSchema } from "@/features/recipes/validation/recipeSchema";
+import { UpdateRecipeInput } from "../types/recipe";
 
 
-export async function getRecipeById(id: number) {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("recipes")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error)  throw new Error("Recipe ID is missing");
-  console.log("ID:to crate", id);
-
-  return data;
-}
 
 export async function updateRecipe(id: number, formData: FormData) {
   const supabase = await createClient();
@@ -27,16 +13,16 @@ export async function updateRecipe(id: number, formData: FormData) {
   const parsed = recipeSchema.safeParse({
     title: formData.get("title"),
     description: formData.get("description"),
-    categories: formData.get("categories"),
+    category_id: Number(formData.get("category_id")),
     ingredients: formData.get("ingredients"),
     instructions: formData.get("instructions"),
   });
 
-  if (!parsed.success) {
-    throw new Error("Validation failed");
+   if (!parsed.success) {
+    return { success: false, errors: parsed.error.flatten().fieldErrors };
   }
 
-  const { title, description, categories, ingredients, instructions } =
+  const { title, description, category_id, ingredients, instructions } =
     parsed.data;
 
   const file = formData.get("image") as File;
@@ -46,10 +32,10 @@ export async function updateRecipe(id: number, formData: FormData) {
     image_url = await uploadImageClient(file);
   }
 
-  const updateData: any = {
+ const updateData: Partial<UpdateRecipeInput> = {
     title,
     description,
-    categories,
+    category_id,
     ingredients,
     instructions,
   };
@@ -63,7 +49,9 @@ export async function updateRecipe(id: number, formData: FormData) {
     .update(updateData)
     .eq("id", id);
 
-  if (error) throw new Error(error.message);
+  if (error) return { success: false, errors: { form: [error.message] } };
+  return { success: true }; 
 
-  redirect(`/recipes/${id}`);
 }
+
+

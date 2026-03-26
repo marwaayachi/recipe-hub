@@ -1,19 +1,36 @@
 "use client";
 
-import { useActionState } from "react";
-import { createRecipe } from "./action";
+import { useActionState, useEffect, useState } from "react";
+import { createRecipe } from "../../../features/recipes/API/CreateRecipe";
 import { useRouter } from "next/navigation";
-import RecipeForm from "@/components/RecipeForm";
+import RecipeForm from "@/features/recipes/components/RecipeForm";
 import Image from "next/image";
+import { getCategories } from "@/features/recipes/API/getCategories";
+import { Category } from "@/features/recipes/types/recipe";
 
 export default function NewRecipePage() {
   const [state, formAction] = useActionState(createRecipe, { errors: {} });
   const router = useRouter();
 
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getCategories();
+      setCategories(data);
+    }
+    load();
+  }, []);
+
   const handleSubmit = async (formData: FormData) => {
-    await formAction(formData);
-    if (state.success) router.push("/recipes");
+    await formAction(formData); 
   };
+
+  useEffect(() => {
+     if (state?.success) {
+      router.push("/recipes");
+    }
+  }, [state]);
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
@@ -29,7 +46,11 @@ export default function NewRecipePage() {
         <h1 className="text-3xl font-bold text-white mb-6 text-center">
           Create a Recipe
         </h1>
-        <RecipeForm onSubmit={handleSubmit} submitLabel="Create Recipe" />
+        <RecipeForm
+          onSubmit={handleSubmit}
+          submitLabel="Create Recipe"
+          categories={categories}
+        />
       </div>
     </div>
   );

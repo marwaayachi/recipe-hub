@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
-import { loginAction, registerAction } from "@/lib/authAction";
+
 import {
   validateEmail,
   validatePassword,
-} from "@/lib/validation/authFormSchema";
+} from "@/features/auth/validation/authFormSchema";
 import Link from "next/link";
+import { loginAction, registerAction } from "../API/authAction";
 
 
 type AuthFormProps = {
