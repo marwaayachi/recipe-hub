@@ -1,19 +1,15 @@
-'use server';
 
-import { createClient } from "@/lib/supabase/server";
+import { supabase } from "@/lib/supabase/client";
 
 export async function getCategories() {
-    
-    const supabase = await createClient();
-    
     const { data, error } = await supabase
     .from("categories")
-    .select("id, name")
-    .order("name");
+    .select("*");
+    
+  if (error) throw new Error(error.message);
+   console.log("ERROR:", error);
 
-    console.log("Categories:", data);
-
-    if (error) throw error;
+  console.log("categories from API:", data);
 
   return data || [];
 }

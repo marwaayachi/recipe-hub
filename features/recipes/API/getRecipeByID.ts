@@ -1,18 +1,27 @@
-import { createClient } from "@/lib/supabase/server";
+import { supabase } from "@/lib/supabase/client";
 
 export async function getRecipeById(id: number) {
-  const supabase = await createClient();
+  console.log("ID received:", id);
+
+  if (!id || isNaN(id)) {
+    throw new Error("Invalid recipe ID");
+  }
 
   const { data, error } = await supabase
     .from("recipes")
-    .select(`*,categories(id, name)`)
+    .select(`*, categories(id, name)`)
     .eq("id", id)
-    .single();
+    .maybeSingle(); 
 
-  if (error)  throw new Error("Recipe ID is missing");
-  console.log("ID:to crate", id);
+  if (error) {
+    throw new Error(error.message);
+  }
 
-  console.log("Recipe info:", data)
+  if (!data) {
+    throw new Error("Recipe not found"); 
+  }
+
+  console.log("Recipe info:", data);
 
   return data;
 }

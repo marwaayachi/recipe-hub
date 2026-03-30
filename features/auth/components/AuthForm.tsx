@@ -1,12 +1,13 @@
 "use client";
-import { useState } from "react";
 
+import { useState } from "react";
 import {
   validateEmail,
   validatePassword,
 } from "@/features/auth/validation/authFormSchema";
 import Link from "next/link";
-import { loginAction, registerAction } from "../API/authAction";
+import { useLogin, useRegister } from "../hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 
 type AuthFormProps = {
@@ -17,6 +18,10 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const loginMutation = useLogin();
+  const registerMutation = useRegister();
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,12 +48,16 @@ export default function AuthForm({ mode }: AuthFormProps) {
     }
 
     try {
-      if (mode === "login") {
-        await loginAction(email, password);
-      } else {
-        await registerAction(email, password);
+      const mutation = mode === "login" ? loginMutation : registerMutation;
+      const result = await mutation.mutateAsync({ email, password });
+
+      if (!result.success) {
+        const message = Object.values(result.errors || {}).flat();
+        setError(message.join(" | "));
       }
-      setError(null);
+
+      router.push("/recipes");
+     
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     }

@@ -1,22 +1,25 @@
 'use client'
 
 import Link from "next/link";
-import { User } from "@supabase/supabase-js";
 import { usePathname, useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 import NavLink from "../ui/NavLink";
 import { Button } from "../ui/button";
 import { useEffect } from "react";
-import { supabase } from "@/lib/supabase/client";
 import { logout } from "@/features/auth/API/logout";
+import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
 
 
 
-type NavbarProps = {
-  user: User | null;
-};
 
-export default function Navbar({ user }: NavbarProps) {
+
+
+export default function Navbar() {
+    const { data: user } = useCurrentUser();
+    const queryClient = useQueryClient(); 
+
     const pathname = usePathname();
     const isHome = pathname === "/";
     const router = useRouter();
@@ -24,19 +27,19 @@ export default function Navbar({ user }: NavbarProps) {
 
     useEffect(() => {
       const { data: listener } = supabase.auth.onAuthStateChange(() => {
+        queryClient.invalidateQueries({ queryKey: ["currentUser"] });
         router.refresh();
       });
 
       return () => {
         listener.subscription.unsubscribe();
       };
-    }, [router]);
+    }, [router, queryClient]);
 
     const handleSignout = async () => {
      try {
        await logout();
-
-       router.refresh();
+       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
        router.push("/auth/login");
      } catch (err) {
        console.error(err);

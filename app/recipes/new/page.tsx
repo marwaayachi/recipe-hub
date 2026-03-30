@@ -1,36 +1,50 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useState } from "react";
 import { createRecipe } from "../../../features/recipes/API/CreateRecipe";
 import { useRouter } from "next/navigation";
 import RecipeForm from "@/features/recipes/components/RecipeForm";
 import Image from "next/image";
-import { getCategories } from "@/features/recipes/API/getCategories";
 import { Category } from "@/features/recipes/types/recipe";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getCategories } from "@/features/recipes/API/getCategories";
 
 export default function NewRecipePage() {
-  const [state, formAction] = useActionState(createRecipe, { errors: {} });
+  const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
   const router = useRouter();
 
-  const [categories, setCategories] = useState<Category[]>([]);
+  const { data: categories = [], isLoading } = useQuery<Category[]>({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  })
 
-  useEffect(() => {
-    async function load() {
-      const data = await getCategories();
-      setCategories(data);
-    }
-    load();
-  }, []);
+ const mutation = useMutation({
+   mutationFn: createRecipe,
+   onSuccess: (result) => {
+     if (result.success) {
+       router.push("/recipes");
+     } else {
+       const normalizedErrors: Record<string, string[]> = {};
+       Object.entries(result.errors || {}).forEach(([key, value]) => {
+         normalizedErrors[key] = value || [];
+       });
+       setFormErrors(normalizedErrors);
+     }
+   },
+ });
 
   const handleSubmit = async (formData: FormData) => {
-    await formAction(formData); 
+    setFormErrors({});
+    await mutation.mutateAsync(formData);
   };
 
-  useEffect(() => {
-     if (state?.success) {
-      router.push("/recipes");
-    }
-  }, [state]);
+    if (isLoading)
+      return (
+        <p className="text-white text-center mt-10">Loading categories...</p>
+      );
+
+
+  
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
@@ -50,6 +64,7 @@ export default function NewRecipePage() {
           onSubmit={handleSubmit}
           submitLabel="Create Recipe"
           categories={categories}
+          errors={formErrors}
         />
       </div>
     </div>
