@@ -1,4 +1,4 @@
-import { supabase } from "./supabase/client";
+import { supabase } from "../supabase/client";
 
 export async function uploadImageClient(file: File, folder: string = "recipes") {
   const fileExt = file.name.split(".").pop();

@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Form from "next/form";
 import CustomFileInput from "@/components/ui/CustomFileInput";
 import { RecipeFormInput } from "@/features/recipes/types/recipe";
+import { Category } from "@/features/recipes/types/recipe";
 
 interface RecipeFormProps {
-  categories: { id: number; name: string }[];
+  categories: Category[];
   initialValues?: Partial<RecipeFormInput>;
   onSubmit: (formData: FormData) => Promise<void>;
   submitLabel: string;
+  errors?: Record<string, string[]>;
 }
 
 export default function RecipeForm({
@@ -17,18 +18,18 @@ export default function RecipeForm({
   initialValues = {},
   onSubmit,
   submitLabel,
+  errors = {},
 }: RecipeFormProps) {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
     initialValues.image_url || null,
   );
-  
+
   const [fileError, setFileError] = useState<string | null>(null);
-  const [errors, setErrors] = useState<Record<string, string[]>>({});
+
 
   const handleSubmit = async (formData: FormData) => {
-
     if (!selectedFile && !initialValues.image_url) {
       setFileError("Please select an image!");
       return;
@@ -36,12 +37,18 @@ export default function RecipeForm({
 
     if (selectedFile) formData.set("image", selectedFile);
 
-    const response = await onSubmit(formData);
-    console.log("After submit:", response);
+    await onSubmit(formData);
   };
 
   return (
-    <Form action={handleSubmit} className="flex flex-col gap-4">
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        await handleSubmit(formData);
+      }}
+      className="flex flex-col gap-4"
+    >
       <input
         name="title"
         placeholder="Recipe title"
@@ -89,13 +96,14 @@ export default function RecipeForm({
 
       <select
         name="category_id"
-        defaultValue={initialValues.category_id || ""}
-        className="w-full p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-400"
+        defaultValue={initialValues.category_id?.toString() || ""}
+        className="w-full p-3 rounded-lg bg-white/90 text-gray-800"
         required
       >
         <option value="">Select category</option>
+
         {categories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
+          <option key={cat.id} value={cat.id.toString()}>
             {cat.name}
           </option>
         ))}
@@ -121,12 +129,22 @@ export default function RecipeForm({
         />
       )}
 
+      <div className="flex items-center gap-2 mt-2">
+        <input
+          type="checkbox"
+          name="is_public"
+          defaultChecked={initialValues.is_public || false}
+          className="w-4 h-4 text-red-500"
+        />
+        <label className="text-gray-700 text-sm">Make this recipe public</label>
+      </div>
+
       <button
         type="submit"
         className="mt-2 bg-red-500 hover:bg-red-600 transition-all duration-200 text-white font-semibold p-3 rounded-lg shadow-lg hover:scale-[1.02]"
       >
         {submitLabel}
       </button>
-    </Form>
+    </form>
   );
 }

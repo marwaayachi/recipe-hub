@@ -14,7 +14,7 @@ export default function CategorySelect({ categories, selectedCategory, onChange 
   return (
     <div className="w-full max-w-6xl mx-auto mb-6 relative">
       {/* Search Icon */}
-      <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+      <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-red-400">
         <FaSearch />
       </div>
 
@@ -25,7 +25,7 @@ export default function CategorySelect({ categories, selectedCategory, onChange 
           pl-10
           pr-4
           py-3
-          border border-gray-300
+          border border-red-500
           rounded-xl
           shadow-sm
           bg-white
