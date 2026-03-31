@@ -12,7 +12,7 @@ export async function createRecipe(formData: FormData) {
     ingredients: formData.get("ingredients"),
     instructions: formData.get("instructions"),
     category_id: Number(formData.get("category_id")),
-    is_public: formData.get("is_public") === "true",
+    is_public: formData.get("is_public"),
   });
 
   if (!parsed.success) {

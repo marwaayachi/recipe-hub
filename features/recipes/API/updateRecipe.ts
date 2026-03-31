@@ -17,7 +17,7 @@ export async function updateRecipe(id: number, formData: FormData) {
     category_id: Number(formData.get("category_id")),
     ingredients: formData.get("ingredients"),
     instructions: formData.get("instructions"),
-    is_public: formData.get("is_public") === "true",
+    is_public: formData.get("is_public"),
   });
 
    if (!parsed.success) {
