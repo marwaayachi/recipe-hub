@@ -6,8 +6,7 @@ import { useCategories } from "@/features/recipes/hooks/useCategories";
 
 export default function RecipesPage() {
   const { data: recipes = [], isLoading: recipesLoading } = useRecipes();
-  const { data: categories = [], isLoading: categoriesLoading } =
-    useCategories();
+  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
 
   if (recipesLoading || categoriesLoading) {
     return <p className="text-center mt-10">Loading...</p>;

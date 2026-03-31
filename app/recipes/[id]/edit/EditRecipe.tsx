@@ -6,10 +6,9 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 
 import RecipeForm from "@/features/recipes/components/RecipeForm";
 import { getRecipeById } from "@/features/recipes/API/getRecipeByID";
-import { getCategories } from "@/features/recipes/API/getCategories";
 import { updateRecipe } from "@/features/recipes/API/updateRecipe";
-import { Category, Recipe } from "@/features/recipes/types/recipe";
-import * as React from "react";
+import { useCategories } from "@/features/recipes/hooks/useCategories";
+import { Recipe } from "@/features/recipes/types/recipe";
 
 type Props = {
    id: string;
@@ -32,12 +31,7 @@ export default function EditRecipePage({ id }: Props) {
   });
 
   // Fetch categories
-  const { data: categories, isLoading: categoriesLoading } = useQuery<
-    Category[]
-  >({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
+ const { data: categories = [], isLoading: categoriesLoading } = useCategories();
 
   // Mutation for updating recipe
   const mutation = useMutation({

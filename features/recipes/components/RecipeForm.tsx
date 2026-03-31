@@ -28,7 +28,6 @@ export default function RecipeForm({
 
   const [fileError, setFileError] = useState<string | null>(null);
 
-  console.log("categories:", categories);
 
   const handleSubmit = async (formData: FormData) => {
     if (!selectedFile && !initialValues.image_url) {
