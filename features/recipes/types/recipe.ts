@@ -15,6 +15,7 @@ export type Recipe = {
   category_id: number;
   categories?: Category;
   image_url: string;
+  is_public?: boolean;
 };
 
 export type RecipeCardData = {
@@ -32,6 +33,7 @@ export type RecipeFormInput = {
   instructions: string;
   category_id: number;
   image_url?: string;
+  is_public?: boolean;
 };
 
 
@@ -42,4 +44,5 @@ export type UpdateRecipeInput = {
   ingredients: string[];
   instructions: string[];
   image_url?: string;
+  is_public: boolean;
 };

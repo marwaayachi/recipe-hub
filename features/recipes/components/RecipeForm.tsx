@@ -129,6 +129,16 @@ export default function RecipeForm({
         />
       )}
 
+      <div className="flex items-center gap-2 mt-2">
+        <input
+          type="checkbox"
+          name="is_public"
+          defaultChecked={initialValues.is_public || false}
+          className="w-4 h-4 text-red-500"
+        />
+        <label className="text-gray-700 text-sm">Make this recipe public</label>
+      </div>
+
       <button
         type="submit"
         className="mt-2 bg-red-500 hover:bg-red-600 transition-all duration-200 text-white font-semibold p-3 rounded-lg shadow-lg hover:scale-[1.02]"

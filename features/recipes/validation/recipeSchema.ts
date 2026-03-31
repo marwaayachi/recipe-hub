@@ -20,4 +20,12 @@ export const recipeSchema = z.object({
     .refine((arr) => arr.length >= 2, {
       message: "Add at least two steps separated by commas",
     }),
+
+    is_public: z
+      .preprocess((val) => {
+        if (val === "on") return true;
+        if (val === undefined) return false;
+        return Boolean(val);
+      }, z.boolean())
+      .default(false),
 });

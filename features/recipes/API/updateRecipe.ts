@@ -17,13 +17,14 @@ export async function updateRecipe(id: number, formData: FormData) {
     category_id: Number(formData.get("category_id")),
     ingredients: formData.get("ingredients"),
     instructions: formData.get("instructions"),
+    is_public: formData.get("is_public") === "true",
   });
 
    if (!parsed.success) {
     return { success: false, errors: parsed.error.flatten().fieldErrors };
   }
 
-  const { title, description, category_id, ingredients, instructions } = parsed.data;
+  const { title, description, category_id, ingredients, instructions, is_public } = parsed.data;
 
   const file = formData.get("image") as File;
   let image_url;
@@ -55,6 +56,7 @@ export async function updateRecipe(id: number, formData: FormData) {
     category_id,
     ingredients,
     instructions,
+    is_public,
   };
 
   if (image_url) {
