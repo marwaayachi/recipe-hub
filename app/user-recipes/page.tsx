@@ -1,11 +1,11 @@
 "use client";
 
 import RecipesFilter from "@/features/recipes/components/RecipesFilter";
-import { useRecipes } from "@/features/recipes/hooks/useRecipes";
+import { useUserRecipes } from "@/features/recipes/hooks/useUserRecipes";
 import { useCategories } from "@/features/recipes/hooks/useCategories";
 
 export default function RecipesPage() {
-  const { data: recipes = [], isLoading: recipesLoading } = useRecipes();
+  const { data: recipes = [], isLoading: recipesLoading } = useUserRecipes();
   const { data: categories = [], isLoading: categoriesLoading } = useCategories();
 
   if (recipesLoading || categoriesLoading) {

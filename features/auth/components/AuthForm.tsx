@@ -56,7 +56,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         setError(message.join(" | "));
       }
 
-      router.push("/recipes");
+      router.push("/public-recipes");
      
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");

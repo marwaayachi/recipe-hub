@@ -9,7 +9,7 @@ import { deleteImage } from "@/lib/storage/deleteImage";
 
 
 export async function updateRecipe(id: number, formData: FormData) {
-  const supabase = await createClient();
+   const supabase = await createClient();
 
   const parsed = recipeSchema.safeParse({
     title: formData.get("title"),
@@ -40,7 +40,6 @@ export async function updateRecipe(id: number, formData: FormData) {
     return { success: false, errors: { form: [fetchError.message] } };
   }
 
-  console.log("Old image URL to delete:", oldRecipe?.image_url);
 
   if (file && file.size > 0) {
     if (oldRecipe?.image_url) {
@@ -59,9 +58,11 @@ export async function updateRecipe(id: number, formData: FormData) {
     is_public,
   };
 
+
   if (image_url) {
     updateData.image_url = image_url;
   }
+
 
   const { error } = await supabase
     .from("recipes")

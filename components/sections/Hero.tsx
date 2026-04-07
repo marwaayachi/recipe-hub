@@ -23,7 +23,7 @@ export default function Hero () {
             Discover, create, and share your favorite recipes easily.
           </p>
           {/* Navigate to Recipes page */}
-          <Link href="/recipes">
+          <Link href="/public-recipes">
             <Button
               size="lg"
               className="mt-8 text-lg bg-red-500 hover:bg-red-700"

@@ -35,7 +35,6 @@ health_timeout = "2m"
 # server_version;` on the remote database to check.
 major_version = 17
 
-
 [db.pooler]
 enabled = false
 # Port to use for the local connection pooler.
@@ -74,6 +73,10 @@ allowed_cidrs = ["0.0.0.0/0"]
 # List of IPv6 CIDR blocks allowed to connect to the database.
 # Defaults to allow all IPv6 connections. Set empty array to block all IPs.
 allowed_cidrs_v6 = ["::/0"]
+
+# Uncomment to reject non-secure connections to the database.
+# [db.ssl_enforcement]
+# enabled = true
 
 [realtime]
 enabled = true
@@ -322,8 +325,7 @@ enabled = false
 # Use Firebase Auth as a third-party provider alongside Supabase Auth.
 [auth.third_party.firebase]
 enabled = false
-
-
+# project_id = "my-firebase-project"
 
 # Use Auth0 as a third-party provider alongside Supabase Auth.
 [auth.third_party.auth0]
@@ -384,3 +386,11 @@ s3_region = "env(S3_REGION)"
 s3_access_key = "env(S3_ACCESS_KEY)"
 # Configures AWS_SECRET_ACCESS_KEY for S3 bucket
 s3_secret_key = "env(S3_SECRET_KEY)"
+
+# [experimental.pgdelta]
+# When enabled, pg-delta becomes the active engine for supported schema flows.
+# enabled = false
+# Directory under `supabase/` where declarative files are written.
+# declarative_schema_path = "./declarative"
+# JSON string passed through to pg-delta SQL formatting.
+# format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"

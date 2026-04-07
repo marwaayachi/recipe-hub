@@ -59,7 +59,7 @@ export default function UserMenu({ email }: UserMenuProps) {
           <p className="text-sm text-gray-600 mb-2">{email}</p>
 
           <Link
-            href="/recipes"
+            href="/user-recipes"
             className="flex items-center gap-2 w-full text-left py-2 px-3 rounded hover:bg-red-50 transition-colors"
           >
             <BookOpen className="w-5 h-5 text-red-500" />

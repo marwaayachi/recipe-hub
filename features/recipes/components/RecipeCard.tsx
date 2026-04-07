@@ -41,7 +41,7 @@ export function RecipeCard({recipe}: RecipeCardProps) {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href={`/recipes/${recipe.id}`}>
+        <Link href={`/user-recipes/${recipe.id}`}>
           <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-md">
             View Recipe
           </Button>

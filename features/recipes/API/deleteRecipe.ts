@@ -1,5 +1,6 @@
 "use server";
 
+import { deleteImage } from "@/lib/storage/deleteImage";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -12,6 +13,19 @@ export async function deleteRecipeAction(formData: FormData) {
     throw new Error("Invalid recipe ID");
   }
 
+    // fetch the image URL before deleting the recipe
+  const { data: recipe, error: fetchError } = await supabase
+    .from("recipes")
+    .select("image_url")
+    .eq("id", id)
+    .single();
+
+  if (fetchError) throw new Error(fetchError.message);
+
+  if (recipe?.image_url) {
+    await deleteImage(recipe.image_url); // delete old image
+  }
+
   const { error } = await supabase
     .from("recipes")
     .delete()
@@ -19,5 +33,6 @@ export async function deleteRecipeAction(formData: FormData) {
 
   if (error) throw new Error(error.message);
 
-  redirect("/recipes"); 
+  redirect("/user-recipes"); 
 }
+

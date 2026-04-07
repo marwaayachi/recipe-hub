@@ -2,7 +2,8 @@ import { supabase } from "@/lib/supabase/client";
 import { RecipeCardData } from "../types/recipe";
 
 
-export async function getRecipes(): Promise<RecipeCardData[]> {
+export async function getUserRecipes(userId:string): Promise<RecipeCardData[]> {
+ 
   const { data, error } = await supabase
     .from("recipes")
     .select(`
@@ -14,7 +15,8 @@ export async function getRecipes(): Promise<RecipeCardData[]> {
         id,
         name
       )
-    `);
+    `)
+    .eq("user_id", userId);
   
   if (error) {
     console.error("Error fetching recipes:", error);
