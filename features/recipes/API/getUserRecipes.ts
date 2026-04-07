@@ -25,5 +25,16 @@ export async function getUserRecipes(userId:string): Promise<RecipeCardData[]> {
 
   
 
-  return (data ?? []) as RecipeCardData[];
+  return (data ?? []).map((recipe: any) => ({
+      id: recipe.id,
+      title: recipe.title,
+      description: recipe.description,
+      image_url: recipe.image_url,
+      categories: recipe.categories
+        ? {
+            id: Number(recipe.categories.id),
+            name: String(recipe.categories.name),
+          }
+        : null,
+  }));
 }
