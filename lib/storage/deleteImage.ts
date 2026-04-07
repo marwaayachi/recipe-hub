@@ -1,24 +1,28 @@
-import { supabase } from "../supabase/client";
+import { createClient } from "../supabase/server";
 
-export async function deleteImage(imageUrl:string) {
-    if (!imageUrl) return;
+export async function deleteImage(imageUrl: string) {
+  const supabase = await createClient();
 
-    try {
-        const urlWithoutQuery = imageUrl.split("?")[0];
+  if (!imageUrl) return;
 
-        const parts = urlWithoutQuery.split("/recipes-images/");
-        const filePath = parts[1];
+  try {
+    const url = new URL(imageUrl);
 
-        if (!filePath) return;
+    // Extract path AFTER /object/public/recipes-images/
+    const filePath = url.pathname.split("/object/public/recipes-images/")[1];
+    
 
-        const { error } = await supabase.storage
-            .from("recipes-images")
-            .remove([filePath]);
-
-        if ( error ) {
-            console.error("Error deleting image:", error.message);
-        }
-    } catch (err) {
-        console.error("Unexpected delete error:", err);
+    if (!filePath) {
+      console.error("No file path extracted");
+      return;
     }
+
+    await supabase.storage
+      .from("recipes-images")
+      .remove([filePath]);
+    
+
+  } catch (err) {
+    console.error("Unexpected delete error:", err);
+  }
 }

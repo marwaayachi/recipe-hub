@@ -58,7 +58,7 @@ export default function Navbar() {
         <div className="flex items-center gap-10">
           <NavLink href="/" label="Home" />
           <NavLink href="/public-recipes" label="Recipes" />
-          <NavLink href="/recipes/new" label="Add Recipe" />
+          <NavLink href="/user-recipes/new" label="Add Recipe" />
 
           <div className="flex items-center gap-4">
             {!user ? (

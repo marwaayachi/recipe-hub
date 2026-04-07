@@ -7,9 +7,7 @@ export async function getCategories() {
     .select("*");
     
   if (error) throw new Error(error.message);
-   console.log("ERROR:", error);
 
-  console.log("categories from API:", data);
 
   return data || [];
 }

@@ -22,7 +22,7 @@ export default function NewRecipePage() {
    mutationFn: createRecipe,
    onSuccess: (result) => {
      if (result.success) {
-       router.push("/recipes");
+       router.push("/user-recipes");
      } else {
        const normalizedErrors: Record<string, string[]> = {};
        Object.entries(result.errors || {}).forEach(([key, value]) => {

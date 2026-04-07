@@ -26,7 +26,7 @@ export default function EditRecipePage({ id }: Props) {
     isError,
     error,
   } = useQuery<Recipe>({
-    queryKey: ["recipe", numericId],
+    queryKey: ["userRecipe", numericId],
     queryFn: () => getRecipeById(numericId),
   });
 
@@ -39,7 +39,7 @@ export default function EditRecipePage({ id }: Props) {
 
     onSuccess: (result) => {
       if (result.success) {
-        router.push(`/recipes/${numericId}`);
+        router.push(`/user-recipes/${numericId}`);
       }
     },
   });
