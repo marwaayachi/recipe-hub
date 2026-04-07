@@ -19,5 +19,19 @@ export default async function getPublicRecipes(): Promise<RecipeCardData[]>{
             return [];
         }
 
-        return (data ?? []) as RecipeCardData[];
+        //return (data ?? []) as RecipeCardData[];
+        console.log("recipes data:", data)
+
+       return (data ?? []).map((recipe: any) => ({
+            id: recipe.id,
+            title: recipe.title,
+            description: recipe.description,
+            image_url: recipe.image_url,
+            categories: recipe.categories
+                ? {
+                    id: Number(recipe.categories.id),
+                    name: String(recipe.categories.name),
+                }
+                : null,
+            }));
 }
