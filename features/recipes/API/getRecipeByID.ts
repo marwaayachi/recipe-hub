@@ -15,10 +15,11 @@ export async function getRecipeById(id: number) {
   if (error) {
     throw new Error(error.message);
   }
-
   if (!data) {
     throw new Error("Recipe not found"); 
   }
+
+
 
   return data;
 }

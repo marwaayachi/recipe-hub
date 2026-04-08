@@ -14,7 +14,7 @@ export default function RecipesPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 p-4">
-      <RecipesFilter recipes={recipes} categories={categories} />
+      <RecipesFilter recipes={recipes} categories={categories} variant="private"/>
     </main>
   );
 }

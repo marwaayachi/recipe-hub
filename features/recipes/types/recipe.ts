@@ -16,6 +16,7 @@ export type Recipe = {
   categories?: Category;
   image_url: string;
   is_public?: boolean;
+  user_id: string;
 };
 
 export type RecipeCardData = {

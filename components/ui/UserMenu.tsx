@@ -9,10 +9,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 interface UserMenuProps {
-  email?: string; 
+  email?: string;
+  variant?: "dropdown" | "mobile";
 }
 
-export default function UserMenu({ email }: UserMenuProps) {
+export default function UserMenu({ email, variant= "dropdown" }: UserMenuProps) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
@@ -30,6 +31,7 @@ export default function UserMenu({ email }: UserMenuProps) {
   };
 
    useEffect(() => {
+    if (variant !== "dropdown") return;
      const handleClickOutside = (event: MouseEvent) => {
        if (
          dropdownRef.current &&
@@ -42,7 +44,28 @@ export default function UserMenu({ email }: UserMenuProps) {
      return () => {
        document.removeEventListener("mousedown", handleClickOutside);
      };
-   }, []);
+   }, [variant]);
+  if (variant === "mobile") {
+    return (
+      <div className="flex flex-col gap-3">
+        <Link
+          href="/user-recipes"
+          className="flex items-center gap-2 py-2  rounded hover:bg-red-50"
+        >
+          <BookOpen className="w-5 h-5 text-black" />
+          <span className="text-gray-800 text-lg font-bold">My Recipes</span>
+        </Link>
+
+        <button
+          onClick={handleSignout}
+          className="flex items-center gap-2 py-2 rounded hover:bg-red-50 text-left"
+        >
+          <LogOut className="w-5 h-5 text-black" />
+          <span className="text-gray-800 text-lg font-bold">Logout</span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="relative" ref={dropdownRef}>

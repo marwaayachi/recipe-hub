@@ -17,7 +17,7 @@ export default function PublicRecipesPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 p-4">
-      <RecipesFilter recipes={publicRecipes} categories={categories} />
+      <RecipesFilter recipes={publicRecipes} categories={categories} variant="public"/>
     </main>
   );
 }

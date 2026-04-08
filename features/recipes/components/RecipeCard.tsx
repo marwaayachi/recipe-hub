@@ -15,9 +15,15 @@ import Link from "next/link";
 
 type RecipeCardProps = {
   recipe: RecipeCardData;
+  variant?: "public" | "private";
 };
 
-export function RecipeCard({recipe}: RecipeCardProps) {
+export function RecipeCard({recipe, variant = "public"}: RecipeCardProps) {
+  const href =
+    variant === "public"
+      ? `/public-recipes/${recipe.id}`
+      : `/user-recipes/${recipe.id}`;
+
   return (
     <Card className="relative mx-auto w-full max-w-xl pt-0 overflow-hidden">
       <div className=" relative w-full h-64">
@@ -41,7 +47,7 @@ export function RecipeCard({recipe}: RecipeCardProps) {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href={`/user-recipes/${recipe.id}`}>
+        <Link href={href}>
           <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-md">
             View Recipe
           </Button>
