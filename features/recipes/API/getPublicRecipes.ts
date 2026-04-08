@@ -19,9 +19,6 @@ export default async function getPublicRecipes(): Promise<RecipeCardData[]>{
             return [];
         }
 
-        //return (data ?? []) as RecipeCardData[];
-        console.log("recipes data:", data)
-
        return (data ?? []).map((recipe: any) => ({
             id: recipe.id,
             title: recipe.title,
@@ -33,5 +30,5 @@ export default async function getPublicRecipes(): Promise<RecipeCardData[]>{
                     name: String(recipe.categories.name),
                 }
                 : null,
-            }));
+       }));
 }
