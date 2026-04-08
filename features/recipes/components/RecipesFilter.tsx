@@ -7,29 +7,27 @@ import { useState } from "react";
 
 
 interface Props {
-    recipes: RecipeCardData[];
-    categories: Category[];
+  recipes: RecipeCardData[];
+  categories: Category[];
+  variant?: "public" | "private";
 }
-export default function RecipesFilter({ recipes, categories }: Props) {
+export default function RecipesFilter({ recipes, categories, variant = "public" }: Props) {
+  const [selectedCategory, setSelectedCategory] = useState<number | "">("");
 
-    const [selectedCategory, setSelectedCategory] = useState<number | "">("");
-
-    const filteredRecipes = 
-        selectedCategory === ""
-        ? recipes
-        : recipes.filter((r) => r.categories?.id === selectedCategory);
+  const filteredRecipes =
+    selectedCategory === ""
+      ? recipes
+      : recipes.filter((r) => r.categories?.id === selectedCategory);
   return (
     <div className="max-w-6xl mx-auto mt-25 flex flex-col gap-6">
-    
       <CategorySelect
         categories={categories}
         selectedCategory={selectedCategory}
         onChange={setSelectedCategory}
       />
 
-     
       {filteredRecipes.length > 0 ? (
-        <RecipesList recipes={filteredRecipes} />
+        <RecipesList recipes={filteredRecipes}  variant={variant}/>
       ) : (
         <p className="text-center text-gray-500 text-lg mt-10">
           No recipes found for this category.

@@ -15,11 +15,18 @@ export default  function RecipeInfoPage({ id }: Props) {
   const numericId = Number(id);
   const { data: currentUser } = useCurrentUser();
 
-  const { data:recipe, isLoading, isError, error } = useQuery({
+  const {
+    data: recipe,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["userRecipe", numericId],
     queryFn: () => getRecipeById(numericId),
     enabled: !isNaN(numericId),
-  })
+  });
+
+  
 
   if (isNaN(numericId)) {
     return <p className="text-center mt-10">Invalid recipe ID</p>;
@@ -29,17 +36,18 @@ export default  function RecipeInfoPage({ id }: Props) {
     return <p className="text-center mt-10">Loading...</p>;
   }
 
-   if (isError) {
-     return <p className="text-center mt-10">{(error as Error).message}</p>;
-   }
+  if (isError) {
+    return <p className="text-center mt-10">{(error as Error).message}</p>;
+  }
 
-   if (!recipe) {
-     return <p className="text-center mt-10">Recipe not found</p>;
-   }
+  if (!recipe) {
+    return <p className="text-center mt-10">Recipe not found</p>;
+  }
+
+  const isOwner = currentUser?.id === recipe.user_id;
 
   return (
     <div className="max-w-3xl mx-auto p-4 mt-20">
-      
       <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
         {recipe.title}
       </h1>
@@ -56,15 +64,15 @@ export default  function RecipeInfoPage({ id }: Props) {
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      <div className="flex items-center gap-3 mb-6">
+     {/* <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white font-bold">
           {currentUser?.email?.charAt(0).toUpperCase()}
         </div>
         <div>
           <p className="text-sm text-gray-500">Created by</p>
-          <p className="font-semibold text-gray-800">{currentUser?.email}</p>
+          <p className="font-semibold text-gray-800">{recipe.user?.email}</p>
         </div>
-      </div>
+      </div>*/}
 
       {/* Category + Description */}
       <div className="bg-white rounded-2xl shadow p-5 mb-6">
@@ -118,15 +126,18 @@ export default  function RecipeInfoPage({ id }: Props) {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-4 justify-end">
-        <Link
-          href={`/user-recipes/${recipe.id}/edit`}
-          className="px-5 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold shadow"
-        >
-          Edit
-        </Link>
+      {isOwner && (
+        <div className="flex gap-4 justify-end">
+          <Link
+            href={`/user-recipes/${recipe.id}/edit`}
+            className="px-5 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold shadow"
+          >
+            Edit
+          </Link>
 
-        <DeleteButton id={numericId} />
-      </div>
+          <DeleteButton id={numericId} />
+        </div>
+      )}
     </div>
-  );}
+  );
+}
